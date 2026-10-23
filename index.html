@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emmanuel &amp; Marcula Advocacia</title>
+<meta name="description" content="Emmanuel & Marcula Advocacia e Consultoria — direito previdenciário.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@300;400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<div class="lines" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<main class="wrap">
+  <header class="hero">
+    <div class="photo"><img src="imagens/foto.webp" alt="Emmanuel e Marcula, advogados do escritório" width="760" height="866"></div>
+    <h1 class="brand"><img src="imagens/logo.png" alt="Emmanuel &amp; Marcula Advocacia e Consultoria" width="900" height="130"></h1>
+  </header>
+
+  <ul class="links" aria-label="Contatos">
+    <li>
+      <a class="card primary js-wa" id="linkWa" href="#">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3Z"/></svg></span>
+        <span class="txt"><span class="ttl">Fale conosco no WhatsApp</span><span class="sub live"><span class="dot" aria-hidden="true"></span>Resposta rápida</span></span>
+        <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </li>
+    <li>
+      <a class="card" id="linkSite" href="#" target="_blank" rel="noopener">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg></span>
+        <span class="txt"><span class="ttl">Visite nosso site</span><span class="sub" id="siteLabel">www.seusite.com.br</span></span>
+        <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </li>
+    <li>
+      <a class="card" id="linkIg" href="#" target="_blank" rel="noopener">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor"/></svg></span>
+        <span class="txt"><span class="ttl">Instagram principal</span><span class="sub" id="igLabel">@emmanuelemarcula.adv</span></span>
+        <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </li>
+  </ul>
+
+</main>
+
+<div class="qz-overlay" id="qzOverlay" hidden>
+  <div class="qz" id="qzDialog" role="dialog" aria-modal="true" aria-labelledby="qzTitle" aria-describedby="qzSub">
+    <div class="qz-head">
+      <h2 class="qz-title" id="qzTitle">Vamos entender o seu caso</h2>
+      <p class="qz-subtitle" id="qzSub">Análise rápida · leva 1 minuto</p>
+      <button type="button" class="qz-close" id="qzClose" aria-label="Fechar questionário">×</button>
+      <div class="qz-bar" role="progressbar" aria-label="Progresso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="qzBar"><span></span></div>
+      <div class="qz-count" id="qzCount" aria-live="polite"></div>
+    </div>
+    <form class="qz-body" id="qzForm" novalidate></form>
+  </div>
+</div>
+
+<script>
+/* ===== EDITE AQUI OS DADOS DO ESCRITÓRIO ===== */
+const ESCRITORIO = {
+  whatsapp: "5587900000000",           // DDI + DDD + número, só dígitos
+  site: "https://www.seusite.com.br",
+  instagram: "emmanuelemarcula.adv"
+};
+/* ============================================= */
+const $ = id => document.getElementById(id), E = ESCRITORIO;
+$("linkSite").href = E.site; $("siteLabel").textContent = E.site.replace(/^https?:\/\//, "");
+$("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel").textContent = "@" + E.instagram;
+
+/* ===== Questionário salário-maternidade ===== */
+(function(){
+  const NUM = ESCRITORIO.whatsapp;
+  const SIM_NAO = ["Sim","Não"];
+  const NUNCA = "Nunca tive carteira nem contribuí";
+  const STEPS = [
+    {id:"carteira", type:"choice", q:"Você tem carteira assinada atualmente?", opts:SIM_NAO, label:"Carteira assinada atualmente"},
+    {id:"ultimo", type:"choice", q:"Quando foi seu último emprego de carteira assinada ou sua última contribuição ao INSS?",
+      opts:["Menos de 12 meses antes do parto","Entre 1 e 2 anos antes do parto","Mais de 2 anos antes do parto",NUNCA],
+      label:"Último emprego/contribuição", show:a=>a.carteira==="Não"},
+    {id:"seguro", type:"choice", q:"Depois que saiu do emprego, recebeu seguro-desemprego?", opts:SIM_NAO, label:"Recebeu seguro-desemprego",
+      show:a=>a.carteira==="Não" && a.ultimo!==NUNCA},
+    {id:"bebe", type:"choice", q:"Já teve o bebê ou ainda está gestante?", opts:["Já tive o bebê","Estou gestante"], label:"Bebê"},
+    {id:"data", type:"text",
+      q:a=>a.bebe==="Estou gestante" ? "Qual a data prevista do parto?" : "Quando o bebê nasceu?",
+      label:a=>a.bebe==="Estou gestante" ? "Previsão do parto" : "Nascimento do bebê"},
+    {id:"inss", type:"choice", q:"Você já fez alguma contribuição para o INSS, como autônoma ou MEI?", opts:SIM_NAO, label:"Já contribuiu com o INSS (autônoma/MEI)"},
+    {id:"rural", type:"choice", q:"Você trabalha ou trabalhou na roça, na pesca ou no extrativismo, em regime familiar?", opts:SIM_NAO, label:"Trabalho rural / pesca"},
+    {id:"salmat", type:"choice", q:"Você já recebeu salário-maternidade por esse filho?", opts:SIM_NAO, label:"Já recebeu salário-maternidade por esse filho",
+      show:a=>a.bebe==="Já tive o bebê"},
+    {id:"bolsa", type:"choice", q:"Você recebe Bolsa Família?", opts:SIM_NAO, label:"Recebe Bolsa Família"},
+    {id:"final", type:"final"}
+  ];
+  const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3Z"/></svg>';
+  const LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+
+  const overlay = document.getElementById("qzOverlay"), dialog = document.getElementById("qzDialog"),
+        form = document.getElementById("qzForm"), bar = document.getElementById("qzBar"), count = document.getElementById("qzCount");
+  let ans = {}, cur = "carteira", lastTrigger = null, advTimer = null, pointerPick = false;
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const val = (v) => typeof v === "function" ? v(ans) : v;
+  const visible = () => STEPS.filter(s => !s.show || s.show(ans));
+  const stepById = id => STEPS.find(s => s.id === id);
+
+  function buildMessage(){
+    const lines = ["Olá! Vim pelo site e quero saber se tenho direito ao salário-maternidade.", "",
+      "*Nome:* " + (ans.nome||"").trim(), "*Cidade:* " + (ans.cidade||"").trim()];
+    visible().forEach(s => { if (s.type !== "final" && ans[s.id] != null && ans[s.id] !== "") lines.push("*" + val(s.label) + ":* " + String(ans[s.id]).trim()); });
+    return lines.join("\n");
+  }
+  const waUrl = () => "https://wa.me/" + NUM + "?text=" + encodeURIComponent(buildMessage());
+
+  function render(){
+    clearTimeout(advTimer);
+    const vis = visible(), idx = vis.findIndex(s => s.id === cur), step = vis[idx];
+    const pct = Math.round((idx + 1) / vis.length * 100);
+    bar.firstElementChild.style.width = pct + "%"; bar.setAttribute("aria-valuenow", pct);
+    count.textContent = "Etapa " + (idx + 1) + " de " + vis.length;
+    const back = idx > 0 ? '<button type="button" class="qz-back" data-back>← Voltar</button>' : '<span></span>';
+    let html = "";
+    if (step.type === "choice"){
+      const two = step.opts.length === 2 && step.opts[0].length < 16;
+      html = '<fieldset class="qz-step"><legend id="qzLeg">' + esc(val(step.q)) + '</legend><div class="qz-opts' + (two ? " two" : "") + '">' +
+        step.opts.map((o,i) => '<label class="qz-opt' + (ans[step.id]===o ? " sel" : "") + '"><input type="radio" name="' + step.id + '" value="' + esc(o) + '"' +
+          (ans[step.id]===o ? " checked" : "") + '><span class="qz-radio" aria-hidden="true"></span><span>' + esc(o) + '</span></label>').join("") +
+        '</div><div class="qz-actions">' + back + '</div></fieldset>';
+    } else if (step.type === "text"){
+      html = '<fieldset class="qz-step"><legend id="qzLeg">' + esc(val(step.q)) + '</legend><div class="qz-field">' +
+        '<label for="qzData" class="sr">Data</label><input class="qz-input" id="qzData" type="text" autocomplete="off" placeholder="Ex.: 10/03/2025" value="' + esc(ans.data||"") + '" aria-describedby="qzDataHint qzDataErr" required>' +
+        '<p class="qz-hint" id="qzDataHint">Pode escrever do seu jeito. Se não souber o dia exato, coloque uma data aproximada.</p>' +
+        '<p class="qz-err" id="qzDataErr" role="alert"></p></div>' +
+        '<div class="qz-actions">' + back + '<button type="submit" class="qz-btn">Continuar</button></div></fieldset>';
+    } else {
+      html = '<fieldset class="qz-step"><legend id="qzLeg">Para finalizar, como podemos te chamar?</legend>' +
+        '<div class="qz-field"><label for="qzNome">Seu nome</label><input class="qz-input" id="qzNome" type="text" autocomplete="name" value="' + esc(ans.nome||"") + '" required></div>' +
+        '<div class="qz-field"><label for="qzCidade">Cidade / Estado</label><input class="qz-input" id="qzCidade" type="text" autocomplete="address-level2" placeholder="Ex.: Petrolina / PE" value="' + esc(ans.cidade||"") + '" required></div>' +
+        '<p class="qz-lock">' + LOCK + 'Seus dados são usados apenas para analisar o seu caso.</p>' +
+        '<p class="qz-err" id="qzFinalErr" role="alert"></p>' +
+        '<div class="qz-actions">' + back + '<a class="qz-btn" id="qzSend" href="#" target="_blank" rel="noopener">' + WA_ICON + 'Enviar pelo WhatsApp</a></div></fieldset>';
+    }
+    form.innerHTML = html;
+    const first = form.querySelector("input:checked") || form.querySelector("input");
+    if (first) first.focus({preventScroll:true});
+    if (step.type === "final") updateSend();
+  }
+
+  function go(dir){
+    const vis = visible(), idx = vis.findIndex(s => s.id === cur);
+    const nxt = vis[idx + dir];
+    if (nxt){ cur = nxt.id; render(); form.scrollTop = 0; }
+  }
+
+  function pick(input, advance){
+    const id = input.name; ans[id] = input.value;
+    // limpa respostas que deixaram de valer
+    STEPS.forEach(s => { if (s.show && !s.show(ans)) delete ans[s.id]; });
+    form.querySelectorAll(".qz-opt").forEach(l => l.classList.toggle("sel", l.querySelector("input").checked));
+    if (advance){ clearTimeout(advTimer); advTimer = setTimeout(() => go(1), 200); }
+  }
+
+  function updateSend(){
+    const a = document.getElementById("qzSend");
+    if (a) a.href = (ans.nome||"").trim() && (ans.cidade||"").trim() ? waUrl() : "#";
+  }
+
+  form.addEventListener("pointerdown", e => { if (e.target.closest(".qz-opt")) pointerPick = true; });
+  form.addEventListener("change", e => {
+    if (e.target.type === "radio"){ pick(e.target, pointerPick); pointerPick = false; }
+  });
+  form.addEventListener("keydown", e => {
+    if (e.target.type === "radio" && (e.key === "Enter" || e.key === " ")){
+      e.preventDefault(); e.target.checked = true; pick(e.target, true);
+    }
+  });
+  form.addEventListener("input", e => {
+    if (e.target.id === "qzData"){ ans.data = e.target.value; e.target.removeAttribute("aria-invalid"); document.getElementById("qzDataErr").textContent = ""; }
+    if (e.target.id === "qzNome"){ ans.nome = e.target.value; }
+    if (e.target.id === "qzCidade"){ ans.cidade = e.target.value; }
+    if (e.target.id === "qzNome" || e.target.id === "qzCidade"){ e.target.removeAttribute("aria-invalid"); document.getElementById("qzFinalErr").textContent = ""; updateSend(); }
+  });
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (cur === "data"){
+      const inp = document.getElementById("qzData");
+      if (!inp.value.trim()){ inp.setAttribute("aria-invalid","true"); document.getElementById("qzDataErr").textContent = "Escreva a data, mesmo que aproximada, para continuar."; inp.focus(); return; }
+      ans.data = inp.value.trim(); go(1);
+    } else if (cur === "final"){ document.getElementById("qzSend")?.click(); }
+  });
+  form.addEventListener("click", e => {
+    if (e.target.closest("[data-back]")){ go(-1); return; }
+    const send = e.target.closest("#qzSend");
+    if (send){
+      const nome = document.getElementById("qzNome"), cid = document.getElementById("qzCidade");
+      const faltando = [!nome.value.trim() && nome, !cid.value.trim() && cid].filter(Boolean);
+      if (faltando.length){
+        e.preventDefault();
+        faltando.forEach(f => f.setAttribute("aria-invalid","true"));
+        document.getElementById("qzFinalErr").textContent = faltando.length === 2 ? "Preencha seu nome e sua cidade para enviar." :
+          (faltando[0] === nome ? "Preencha seu nome para enviar." : "Preencha sua cidade / estado para enviar.");
+        faltando[0].focus(); return;
+      }
+      send.href = waUrl();
+      setTimeout(close, 300);
+    }
+  });
+
+  function open(trigger){
+    lastTrigger = trigger || document.activeElement;
+    ans = {}; cur = "carteira";
+    overlay.hidden = false; document.body.classList.add("quiz-lock");
+    render();
+  }
+  function close(){
+    clearTimeout(advTimer);
+    overlay.hidden = true; document.body.classList.remove("quiz-lock");
+    if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+  }
+
+  document.getElementById("qzClose").addEventListener("click", close);
+  overlay.addEventListener("mousedown", e => { if (e.target === overlay) close(); });
+  document.addEventListener("keydown", e => {
+    if (overlay.hidden) return;
+    if (e.key === "Escape"){ e.preventDefault(); close(); return; }
+    if (e.key === "Tab"){ // mantém o foco dentro da janela
+      const f = [...dialog.querySelectorAll("button,[href],input")].filter(el => {
+        if (el.offsetParent === null) return false;
+        if (el.type !== "radio") return true;
+        const g = [...form.querySelectorAll('input[name="' + el.name + '"]')];
+        const chk = g.find(r => r.checked);
+        return chk ? el === chk : el === g[0];
+      });
+      if (!f.length) return;
+      const firstEl = f[0], lastEl = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === firstEl){ e.preventDefault(); lastEl.focus(); }
+      else if (!e.shiftKey && document.activeElement === lastEl){ e.preventDefault(); firstEl.focus(); }
+    }
+  });
+
+  document.querySelectorAll(".js-wa").forEach(btn => {
+    btn.setAttribute("href", "#"); btn.removeAttribute("target");
+    btn.setAttribute("aria-haspopup", "dialog");
+    btn.addEventListener("click", e => { e.preventDefault(); open(btn); });
+  });
+
+})();
+</script>
+</body>
+</html>
