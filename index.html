@@ -63,9 +63,10 @@
 <script>
 /* ===== EDITE AQUI OS DADOS DO ESCRITÓRIO ===== */
 const ESCRITORIO = {
-  whatsapp: "5587900000000",           // DDI + DDD + número, só dígitos
+  whatsapp: "558791995443",           // DDI + DDD + número, só dígitos
   site: "https://emmanuelemarculadv.com.br/",
-  instagram: "emmanuelemarcula.adv"
+  instagram: "emmanuelemarcula.adv",
+  planilha: "https://script.google.com/macros/s/AKfycbxdtNJhLZDy53PPBsFiXnEZ_aaJ8DpRUWUQRNr216-iPgINNHdpAqtuJky8piB0OSFm/exec"   // cole aqui o link do Apps Script (termina em /exec)
 };
 /* ============================================= */
 const $ = id => document.getElementById(id), E = ESCRITORIO;
@@ -107,9 +108,51 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
   const visible = () => STEPS.filter(s => !s.show || s.show(ans));
   const stepById = id => STEPS.find(s => s.id === id);
 
+  // De onde a pessoa veio (vai para a coluna "Origem" da planilha)
+  const ORIGEM = (() => {
+    const nomes = { cartao: "Cartão de visita", "cartao-de-visita": "Cartão de visita", qr: "Cartão de visita", qrcode: "Cartão de visita",
+                    site: "Site", instagram: "Instagram", ig: "Instagram", google: "Google", whatsapp: "WhatsApp" };
+    let salvo = ""; try { salvo = sessionStorage.getItem("origem") || ""; } catch (_) {}
+    const q = new URLSearchParams(location.search);
+    const param = (q.get("origem") || q.get("utm_source") || "").toLowerCase().trim();
+    let o = param ? (nomes[param] || param.charAt(0).toUpperCase() + param.slice(1)) : salvo;
+    if (!o){
+      let ref = ""; try { ref = new URL(document.referrer).hostname; } catch (_) {}
+      if (/instagram\.com$/.test(ref)) o = "Instagram";
+      else if (/emmanuelemarculadv\.com\.br$/.test(ref)) o = "Site";
+      else if (/google\./.test(ref)) o = "Google";
+      else if (/facebook\.com$|fb\.com$/.test(ref)) o = "Facebook";
+      else o = "Portfólio (link direto)";
+    }
+    try { sessionStorage.setItem("origem", o); } catch (_) {}
+    return o;
+  })();
+
+  const telOk = t => { const d = String(t||"").replace(/\D/g, ""); return d.length >= 10 && d.length <= 13; };
+
+  // Envia as respostas para a planilha (Google Sheets via Apps Script)
+  function salvarNaPlanilha(){
+    const url = (ESCRITORIO.planilha || "").trim();
+    if (!url || document.getElementById("qzEmpresa")?.value) return;
+    const vis = visible().map(s => s.id), v = id => vis.includes(id) ? (ans[id] || "") : "";
+    const dados = {
+      nome: (ans.nome||"").trim(), telefone: (ans.telefone||"").trim(), cidade: (ans.cidade||"").trim(),
+      carteira: v("carteira"), ultimo: v("ultimo"), seguro: v("seguro"), bebe: v("bebe"),
+      data: v("data"), tipoData: ans.bebe === "Estou gestante" ? "Previsão do parto" : "Nascimento do bebê",
+      inss: v("inss"), rural: v("rural"), salmat: v("salmat"), bolsa: v("bolsa"),
+      origem: ORIGEM
+    };
+    const body = JSON.stringify(dados);
+    try {
+      fetch(url, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body }).catch(() => {});
+    } catch (err) {
+      try { navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: "text/plain;charset=utf-8" })); } catch (_) {}
+    }
+  }
+
   function buildMessage(){
     const lines = ["Olá! Vim pelo site e quero saber se tenho direito ao salário-maternidade.", "",
-      "*Nome:* " + (ans.nome||"").trim(), "*Cidade:* " + (ans.cidade||"").trim()];
+      "*Nome:* " + (ans.nome||"").trim(), "*Telefone:* " + (ans.telefone||"").trim(), "*Cidade:* " + (ans.cidade||"").trim()];
     visible().forEach(s => { if (s.type !== "final" && ans[s.id] != null && ans[s.id] !== "") lines.push("*" + val(s.label) + ":* " + String(ans[s.id]).trim()); });
     return lines.join("\n");
   }
@@ -138,7 +181,9 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     } else {
       html = '<fieldset class="qz-step"><legend id="qzLeg">Para finalizar, como podemos te chamar?</legend>' +
         '<div class="qz-field"><label for="qzNome">Seu nome</label><input class="qz-input" id="qzNome" type="text" autocomplete="name" value="' + esc(ans.nome||"") + '" required></div>' +
+        '<div class="qz-field"><label for="qzTel">WhatsApp / Telefone</label><input class="qz-input" id="qzTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ex.: (87) 99999-9999" value="' + esc(ans.telefone||"") + '" required></div>' +
         '<div class="qz-field"><label for="qzCidade">Cidade / Estado</label><input class="qz-input" id="qzCidade" type="text" autocomplete="address-level2" placeholder="Ex.: Petrolina / PE" value="' + esc(ans.cidade||"") + '" required></div>' +
+        '<div class="sr" aria-hidden="true"><label for="qzEmpresa">Empresa</label><input id="qzEmpresa" type="text" tabindex="-1" autocomplete="off"></div>' +
         '<p class="qz-lock">' + LOCK + 'Seus dados são usados apenas para analisar o seu caso.</p>' +
         '<p class="qz-err" id="qzFinalErr" role="alert"></p>' +
         '<div class="qz-actions">' + back + '<a class="qz-btn" id="qzSend" href="#" target="_blank" rel="noopener">' + WA_ICON + 'Enviar pelo WhatsApp</a></div></fieldset>';
@@ -165,7 +210,7 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
 
   function updateSend(){
     const a = document.getElementById("qzSend");
-    if (a) a.href = (ans.nome||"").trim() && (ans.cidade||"").trim() ? waUrl() : "#";
+    if (a) a.href = (ans.nome||"").trim() && telOk(ans.telefone) && (ans.cidade||"").trim() ? waUrl() : "#";
   }
 
   form.addEventListener("pointerdown", e => { if (e.target.closest(".qz-opt")) pointerPick = true; });
@@ -181,7 +226,8 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     if (e.target.id === "qzData"){ ans.data = e.target.value; e.target.removeAttribute("aria-invalid"); document.getElementById("qzDataErr").textContent = ""; }
     if (e.target.id === "qzNome"){ ans.nome = e.target.value; }
     if (e.target.id === "qzCidade"){ ans.cidade = e.target.value; }
-    if (e.target.id === "qzNome" || e.target.id === "qzCidade"){ e.target.removeAttribute("aria-invalid"); document.getElementById("qzFinalErr").textContent = ""; updateSend(); }
+    if (e.target.id === "qzTel"){ ans.telefone = e.target.value; }
+    if (e.target.id === "qzNome" || e.target.id === "qzCidade" || e.target.id === "qzTel"){ e.target.removeAttribute("aria-invalid"); document.getElementById("qzFinalErr").textContent = ""; updateSend(); }
   });
   form.addEventListener("submit", e => {
     e.preventDefault();
@@ -195,16 +241,20 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     if (e.target.closest("[data-back]")){ go(-1); return; }
     const send = e.target.closest("#qzSend");
     if (send){
-      const nome = document.getElementById("qzNome"), cid = document.getElementById("qzCidade");
-      const faltando = [!nome.value.trim() && nome, !cid.value.trim() && cid].filter(Boolean);
+      const nome = document.getElementById("qzNome"), tel = document.getElementById("qzTel"), cid = document.getElementById("qzCidade");
+      const faltando = [];
+      if (!nome.value.trim()) faltando.push([nome, "seu nome"]);
+      if (!telOk(tel.value)) faltando.push([tel, tel.value.trim() ? "um telefone válido com DDD" : "seu telefone com DDD"]);
+      if (!cid.value.trim()) faltando.push([cid, "sua cidade / estado"]);
       if (faltando.length){
         e.preventDefault();
-        faltando.forEach(f => f.setAttribute("aria-invalid","true"));
-        document.getElementById("qzFinalErr").textContent = faltando.length === 2 ? "Preencha seu nome e sua cidade para enviar." :
-          (faltando[0] === nome ? "Preencha seu nome para enviar." : "Preencha sua cidade / estado para enviar.");
-        faltando[0].focus(); return;
+        faltando.forEach(f => f[0].setAttribute("aria-invalid","true"));
+        const itens = faltando.map(f => f[1]);
+        document.getElementById("qzFinalErr").textContent = "Preencha " + (itens.length > 1 ? itens.slice(0,-1).join(", ") + " e " + itens.at(-1) : itens[0]) + " para enviar.";
+        faltando[0][0].focus(); return;
       }
       send.href = waUrl();
+      salvarNaPlanilha();
       setTimeout(close, 300);
     }
   });
