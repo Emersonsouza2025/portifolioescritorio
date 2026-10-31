@@ -128,7 +128,6 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     return o;
   })();
 
-  const telOk = t => { const d = String(t||"").replace(/\D/g, ""); return d.length >= 10 && d.length <= 13; };
 
   // Envia as respostas para a planilha (Google Sheets via Apps Script)
   function salvarNaPlanilha(){
@@ -136,7 +135,7 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     if (!url || document.getElementById("qzEmpresa")?.value) return;
     const vis = visible().map(s => s.id), v = id => vis.includes(id) ? (ans[id] || "") : "";
     const dados = {
-      nome: (ans.nome||"").trim(), telefone: (ans.telefone||"").trim(), cidade: (ans.cidade||"").trim(),
+      nome: (ans.nome||"").trim(), telefone: "Ver na conversa do WhatsApp", cidade: (ans.cidade||"").trim(),
       carteira: v("carteira"), ultimo: v("ultimo"), seguro: v("seguro"), bebe: v("bebe"),
       data: v("data"), tipoData: ans.bebe === "Estou gestante" ? "Previsão do parto" : "Nascimento do bebê",
       inss: v("inss"), rural: v("rural"), salmat: v("salmat"), bolsa: v("bolsa"),
@@ -152,7 +151,7 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
 
   function buildMessage(){
     const lines = ["Olá! Vim pelo site e quero saber se tenho direito ao salário-maternidade.", "",
-      "*Nome:* " + (ans.nome||"").trim(), "*Telefone:* " + (ans.telefone||"").trim(), "*Cidade:* " + (ans.cidade||"").trim()];
+      "*Nome:* " + (ans.nome||"").trim(), "*Cidade:* " + (ans.cidade||"").trim()];
     visible().forEach(s => { if (s.type !== "final" && ans[s.id] != null && ans[s.id] !== "") lines.push("*" + val(s.label) + ":* " + String(ans[s.id]).trim()); });
     return lines.join("\n");
   }
@@ -181,7 +180,6 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     } else {
       html = '<fieldset class="qz-step"><legend id="qzLeg">Para finalizar, como podemos te chamar?</legend>' +
         '<div class="qz-field"><label for="qzNome">Seu nome</label><input class="qz-input" id="qzNome" type="text" autocomplete="name" value="' + esc(ans.nome||"") + '" required></div>' +
-        '<div class="qz-field"><label for="qzTel">WhatsApp / Telefone</label><input class="qz-input" id="qzTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ex.: (87) 99999-9999" value="' + esc(ans.telefone||"") + '" required></div>' +
         '<div class="qz-field"><label for="qzCidade">Cidade / Estado</label><input class="qz-input" id="qzCidade" type="text" autocomplete="address-level2" placeholder="Ex.: Petrolina / PE" value="' + esc(ans.cidade||"") + '" required></div>' +
         '<div class="sr" aria-hidden="true"><label for="qzEmpresa">Empresa</label><input id="qzEmpresa" type="text" tabindex="-1" autocomplete="off"></div>' +
         '<p class="qz-lock">' + LOCK + 'Seus dados são usados apenas para analisar o seu caso.</p>' +
@@ -210,7 +208,7 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
 
   function updateSend(){
     const a = document.getElementById("qzSend");
-    if (a) a.href = (ans.nome||"").trim() && telOk(ans.telefone) && (ans.cidade||"").trim() ? waUrl() : "#";
+    if (a) a.href = (ans.nome||"").trim() && (ans.cidade||"").trim() ? waUrl() : "#";
   }
 
   form.addEventListener("pointerdown", e => { if (e.target.closest(".qz-opt")) pointerPick = true; });
@@ -226,8 +224,7 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     if (e.target.id === "qzData"){ ans.data = e.target.value; e.target.removeAttribute("aria-invalid"); document.getElementById("qzDataErr").textContent = ""; }
     if (e.target.id === "qzNome"){ ans.nome = e.target.value; }
     if (e.target.id === "qzCidade"){ ans.cidade = e.target.value; }
-    if (e.target.id === "qzTel"){ ans.telefone = e.target.value; }
-    if (e.target.id === "qzNome" || e.target.id === "qzCidade" || e.target.id === "qzTel"){ e.target.removeAttribute("aria-invalid"); document.getElementById("qzFinalErr").textContent = ""; updateSend(); }
+    if (e.target.id === "qzNome" || e.target.id === "qzCidade"){ e.target.removeAttribute("aria-invalid"); document.getElementById("qzFinalErr").textContent = ""; updateSend(); }
   });
   form.addEventListener("submit", e => {
     e.preventDefault();
@@ -241,10 +238,9 @@ $("linkIg").href = "https://www.instagram.com/" + E.instagram + "/"; $("igLabel"
     if (e.target.closest("[data-back]")){ go(-1); return; }
     const send = e.target.closest("#qzSend");
     if (send){
-      const nome = document.getElementById("qzNome"), tel = document.getElementById("qzTel"), cid = document.getElementById("qzCidade");
+      const nome = document.getElementById("qzNome"), cid = document.getElementById("qzCidade");
       const faltando = [];
       if (!nome.value.trim()) faltando.push([nome, "seu nome"]);
-      if (!telOk(tel.value)) faltando.push([tel, tel.value.trim() ? "um telefone válido com DDD" : "seu telefone com DDD"]);
       if (!cid.value.trim()) faltando.push([cid, "sua cidade / estado"]);
       if (faltando.length){
         e.preventDefault();
